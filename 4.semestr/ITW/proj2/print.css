@@ -1,0 +1,7 @@
+header, footer, #topimage {
+  display: none;
+}
+
+img {
+	width: 50%;
+}

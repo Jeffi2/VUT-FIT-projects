@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Projekt IIS</title>
+    <style type="text/css">
+    	table { border-collapse: collapse; }
+    	td, th { border: 1px solid black; padding: 0.3em 0.5em; text-align: left; }
+    	dt { font-weight: bold; margin-top: 0.5em; }
+    </style>
+</head>
+<body>
+
+<!-- Zkontrolujte prosím nastavení kódování v hlavičce dokumentu 
+     podle použitého editoru -->
+
+<h1>Prodejna sýrů</h1> <!-- Nahradte názvem svého zadání -->
+<h2>Zadání: (usecase v dokumentu IDS-usecase.pdf)</h2>
+<p>Navrhněte IS prodejny se sýry, který umožní evidovat zboží v prodejně. Dále umožní zaměstnanci objednávat sýry v prodejně od různých dodavatelů. Jedna objednávka může obsahovat více druhů zboží.
+	Sýry se kategorizují podle země původu, typu a živočicha. Dle těchto kritérií je možné sýry také vyhledávat. Sýry jsou do prodejny dodávány v bochnících, u kterých je nutné evidovat počáteční a 
+	aktuální hmostnost, datum dodání a trvanlivosti. Zaměstnanci mohou objednávat sýry od více dodavatelů (né každý nabízí všechny druhy sýru), přičemž objednávka může obsahovat více druhů sýrů nabízených
+dodavatelem. U každého sýru je nutné specifikovat množství. Pro dodané sýry je nutné mít možnost dohledat od kterého dodavatele jsou a k jaké objednávce patří.</p>
+<dl>
+	<dt>Autoři</dt>
+	<dd>Petr Jůda <!-- Nahraďte skutečným jménem a e-mailem autora a popisem činnosti -->
+	    <a href="mailto:xjudap00@stud.fit.vutbr.cz">xjudap00@stud.fit.vutbr.cz</a> -
+	    úprava databázového subsystému, funkcionalita z pohledu role dodavatele a administrátora
+	</dd>
+	<dd>Filip Januš <!-- Nahraďte skutečným jménem a e-mailem autora a popisem činnosti -->
+	    <a href="mailto:xjudap08@stud.fit.vutbr.cz">xjanus08@stud.fit.vutbr.cz</a> - 
+		funkcionalita z pohledu role zaměstnance a uživatelské rozhraní, javascript, ajax
+	</dd>
+	<dt>URL aplikace</dt>
+	<dd><a href="http://www.vinarstvijanus.cz/subdom/iis/">http://www.vinarstvijanus.cz/subdom/iis/</a></dd>
+</dl>
+
+<h2>Uživatelé systému pro testování</h2>
+<p>Uveďte prosím existující zástupce <strong>všech rolí uživatelů</strong>.</p>
+<table>
+<tr><th>Login</th><th>Heslo</th><th>Role</th></tr>
+<tr><td>a@a.cz</td><td>a</td><td>Administrátor</td></tr>
+<tr><td>z@z.cz</td><td>a</td><td>Zaměstnanec</td></tr>
+<tr><td>d@d.cz</td><td>a</td><td>Dodavatel</td></tr>
+</table>
+
+<h2>Implementace</h2>
+<p>Po přístupu na hlavní stránku je možné se do systému přihlásit nebo se zaregistrovat jako nový dodavatel.<br>
+<b>(Řešeno v app/presenters/LoginPresenter.php a app/presenters/RegisterDodPresenter.php)</p></b>
+
+<p>Po přihlášení jako dodavatel je možné zaregistrovat nebo smazat svou nabídků sýrů, případně upravovat ceny.<br>
+	Dále je také možné zobrazit přehled vytvořených objednávek. <br>
+<b>(Řešeno v app/presenters/HomeDodPresenter.php)</p></b>
+
+<p>Po přihlášení jako zaměstnanec je zobrazen přehled prodejen, na kterých zaměstnanec pracuje a také možnost vyhledávání sýrů. <br>
+	Po přesunu do požadované prodejny je zobrazen grafový přehled aktuálního množství daného typu sýru na prodejně. Detailní<br>
+	 informace o bochníku je možné získat po kliknutí na příslušný sloupec grafu. Systém automaticky kontroluje trvanlivost jednotlivých<br>
+	 bochníků. V případě, že je bochník prošlý je zobrazena možnost jeho odstranění. Dále pak zaměstnanec může vytvořit objednávku<br>
+	 sýrů na prodejnu. Tato objednávka se zobrazí v přehledu objednávek. Jakýkoliv zaměstnanec pracující na stejné prodejně, pak může<br>
+	 potvrdit přijetí bochníků na prodejnu. (Zaměstnanec může pracovat na více prodejnách, prodejna může mít více zaměstnanců.)<br>
+
+<b>(Řešeno v app/presenters/HomeUserPresenter.php)</p></b>
+
+<p>Po přihlášení jako administrátor je zobrazen přehled jednotlivých uživatelů systému. Administrátor může upravovat informace dodavatelů <br>
+	a zaměstnanců. Mazat uživatele nebo jim dočastně zablokovat přihlášení. Dále pak může registrovat další administrátory a zaměstnance. <br>
+	K dispozici je i možnost přidat novou prodejnu, ale také zobrazit přehled prodejen s jednotlivými zaměstnanci. Prázdnou prodejnu je možné <br>
+	smazat, ostatní editovat. <br>
+<b>(Řešeno v app/presenters/HomeAdminPresenter.php)</p></b>
+<p>Automatické odhlášení uživatele je nastaveno na 60 minut.</p>
+
+<h2>Instalace</h2>
+<ul>
+<li>Softwarové požadavky: PHP 5.6.+, MySQL 5.7.20+, Composer</li>
+<li>Rozbalit archiv, přejít do příslušné složky. Zadat příkaz <b>composer install</b>. </li>
+<li>Automaticky vytvoří adresář vendor, na stejné úrovni ručně vytvořit adresáře tmp, temp, log.</li>
+<li>Vytvořit a naplnit databázi pomocí scriptu <b>db.sql</b>. </li>
+<li>Nastavit přihlačovací údaje do databáze v soubrou <b>app/config/config.local.neon</b></li>
+<li>Nahrát celý obsah adresáře na server.</li>
+<li>(V případě problému s připojením upravit soubory <b>.htaccess</b>, dle nastavení providera)</li>
+</ul>
+
+</body>
+</html>

@@ -1,0 +1,150 @@
+{block content}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <a  n:href="shopDetail $id_prodejny"><p data-placement="top" data-toggle="tooltip" title="Zpet na prodejnu"><button class="btn btn-primary btn-xs" data-title="back" ><span class="glyphicon glyphicon-arrow-left"> Prodejna</span></button></p></a>
+            <div class="table-responsive">
+
+                <table id="mytable" class="table table-bordred table-striped">
+
+                    <thead>
+                    <th>Dodavatel:</th>
+                    <th>Sýr:</th>
+                    <th>Množství:</th>
+
+
+                    <th>Smazat</th>
+                    <th>Cena:</th>
+
+                    </thead>
+                    <tfoot >
+                    <tr>
+                        <td style="font-weight: bold;">Celkem</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+
+                        <td style="font-weight: bold;">{$celkem} Kč</td>
+                    </tr>
+                    </tfoot>
+                    <tbody>
+
+                        {for $i = 0; $i < count($card); $i++}
+
+
+                            <tr>
+                                <td>{$card[$i]["nazev"]}</td>
+                                    <td>{$card[$i]["syr"]}</td>
+                                    <td>{$card[$i]["mnozstvi"]} Kg</td>
+                                    <td><a n:href="remove! id=>$i"><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" ><span class="glyphicon glyphicon-trash"></span></button></p></a></td>
+                                    <td>{$card[$i]["cena"]} Kč</td>
+                            </tr>
+                    {/for}
+
+                    </tbody>
+
+                </table>
+                <a n:href="send!"> <button class="form-control btn btn-login" >Odeslat objednávku</button></a>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+{form selectForm}
+    <div class="container" style="width: 100%; text-align: center;">
+        <div class="form-horizontal">
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    <h2>Objednávka</h2>
+                    <hr>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container" style="width: 100%;">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="panel panel-login">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+
+                                {snippetArea wrapper}
+                                    {form selectForm}
+                                        <div class="form-group">
+                                            {label first /} {input first}
+                                        </div>
+                                        {snippet secondSnippet}
+                                            <div class="form-group">
+                                                {label second /} {input second}
+                                            </div>
+
+                                            <div class="form-group">
+                                            {snippet thirdSnippet}
+                                                <p>Cena: {$cena}</p>
+                                            {/snippet}
+                                            {include jsCallback, input => first, link => firstChange}
+                                            {include jsCallback, input => second, link => secondChange}
+                                        {/snippet}
+                                        </div>
+                                        <div class="form-group">
+                                            {label mnozstvi /}  {input mnozstvi}
+                                        </div>
+                                        <div class="form-group">
+                                            {input send}
+                                        </div>
+                                    {/form}
+                                {/snippetArea}
+
+                                {include jsCallback, input => first, link => firstChange}
+                                {include jsCallback, input => second, link => secondChange}
+
+
+
+
+                                {define jsCallback}
+                                    <script>
+
+                                        $('#' + {$control["selectForm"][$input]->htmlId}).off('change').on('change', function () {
+                                            $.nette.ajax({
+                                                type: 'GET',
+                                                url: {link {$link}!},
+                                                data: {
+                                                    'value': $(this).val(),
+                                                }
+                                            });
+                                        });
+
+                                    </script>
+                                {/define}
+
+
+
+                                <div class="row">
+                                    <div class="col-sm-6 col-sm-offset-3">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{/form}

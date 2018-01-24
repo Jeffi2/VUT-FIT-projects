@@ -1,0 +1,52 @@
+{* This is the welcome page, you can delete it *}
+
+{block content}
+
+{form uptCheeseForm}
+    <div class="container">
+        <div class="form-horizontal">
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    <h2>Upravit cenu nabízeného sýru:</h2>
+                    <hr>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <div class="panel panel-login">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                        <span class="align-middle input-group-addo">
+                                        <p>* Cena v Kč/Kg:</p>
+                                    </span>
+                                </div>
+                                <div class="form-group">
+                                    {input cena}
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-sm-6 col-sm-offset-3">
+                                            {$form['send']->control}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                        <span class="align-middle input-group-addo">
+                                        <p>* povinné položky</p>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{/form}

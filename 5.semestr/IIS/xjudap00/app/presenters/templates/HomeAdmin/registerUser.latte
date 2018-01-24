@@ -1,0 +1,154 @@
+{* This is the welcome page, you can delete it *}
+
+{block content}
+{form regUsrForm}
+    <div class="container">
+        <div class="form-horizontal">
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    <h2>Registrace zaměstnance</h2>
+                    <hr>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <div class="panel panel-login">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                        <span class="align-middle input-group-addo">
+                                        <p>* E-mail (login):</p>
+                                    </span>
+                                </div>
+                                <div class="form-group">
+                                    {input login}
+                                </div>
+                                {ifset $loginERR}
+                                    <div class="form-group">
+                                        <span class="text-danger align-middle input-group-addo">
+                                        <p>{$loginERR}</p>
+                                    </span>
+                                    </div>
+                                {/ifset}
+                                <div class="form-group">
+                                        <span class="align-middle input-group-addo">
+                                        <p>* Heslo (znaky 3+):</p>
+                                    </span>
+                                </div>
+                                <div class="form-group">
+                                    {input password}
+                                </div>
+                                <div class="form-group">
+                                        <span class="align-middle input-group-addo">
+                                        <p>* Heslo znovu:</p>
+                                    </span>
+                                </div>
+                                <div class="form-group">
+                                    {input passwordCheck}
+                                </div>
+                                <div class="form-group">
+                                        <span class="align-middle input-group-addo">
+                                        <p>* Jméno:</p>
+                                    </span>
+                                </div>
+                                <div class="form-group">
+                                    {input jmeno}
+                                </div>
+                                <div class="form-group">
+                                        <span class="align-middle input-group-addo">
+                                        <p>* Příjmení:</p>
+                                    </span>
+                                </div>
+                                <div class="form-group">
+                                    {input prijmeni}
+                                </div>
+                                <div class="form-group">
+                                        <span class="align-middle input-group-addo">
+                                        <p>* Prodejna: (Pro výber více položek lze použít CTRL nebo SHIFT)</p>
+                                    </span>
+                                </div>
+                                <div class="form-group">
+                                    {input id_pro}
+                                </div>
+                                <div class="form-group">
+                                        <span class="align-middle input-group-addo">
+                                        <p>* Plat:</p>
+                                    </span>
+                                </div>
+                                <div class="form-group">
+                                    {input plat}
+                                </div>
+                                <div class="form-group">
+                                        <span class="align-middle input-group-addo">
+                                        <p>Telefon:</p>
+                                    </span>
+                                </div>
+                                <div class="form-group">
+                                    {input telefon}
+                                </div>
+
+                                <div class="form-group">
+                                        <span class="align-middle input-group-addo">
+                                        <p>Ulice:</p>
+                                    </span>
+                                </div>
+                                <div class="form-group">
+                                    {input ulice}
+                                </div>
+                                <div class="form-group">
+                                        <span class="align-middle input-group-addo">
+                                        <p>Číslo popisné:</p>
+                                    </span>
+                                </div>
+                                <div class="form-group">
+                                    {input cislo_popisne}
+                                </div>
+                                <div class="form-group">
+                                        <span class="align-middle input-group-addo">
+                                        <p>Město:</p>
+                                    </span>
+                                </div>
+                                <div class="form-group">
+                                    {input mesto}
+                                </div>
+                                <div class="form-group">
+                                        <span class="align-middle input-group-addo">
+                                        <p>PSČ:</p>
+                                    </span>
+                                </div>
+                                <div class="form-group">
+                                    {input psc}
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-sm-6 col-sm-offset-3">
+                                            {$form['send']->control}
+                                        </div>
+                                    </div>
+                                </div>
+                                {ifset $dbERR}
+                                    <div class="form-group">
+                                        <span class="text-danger align-middle input-group-addo">
+                                        <p>{$dbERR}</p>
+                                    </span>
+                                    </div>
+                                {/ifset}
+                                <div class="form-group">
+                                        <span class="align-middle input-group-addo">
+                                        <p>* povinné položky</p>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{/form}

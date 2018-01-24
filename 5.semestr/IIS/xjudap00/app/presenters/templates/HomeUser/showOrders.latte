@@ -1,0 +1,81 @@
+{block content}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h4>Přehled objednávek na prodejně:</h4><a n:href="shopDetail $id_prodejny"><p data-placement="top" data-toggle="tooltip" title="Zpet na prodejnu"><button class="btn btn-primary btn-xs" data-title="back" ><span class="glyphicon glyphicon-arrow-left"> Prodejna</span></button></p></a>
+            {ifset $orders}
+                {foreach $orders as $order}
+                    <div class="table-responsive">
+
+                    <table id="mytable" class="table table-bordred table-striped">
+
+                    <thead>
+                    <th>Datum vytvoření:</th>
+                    <th class="text-center">Celková cena:</th>
+                    <th class="text-center">Stav:</th>
+                    <th class="text-center">Datum platby:</th>
+                    <th>Dodavatel:</th>
+                    {if $order->dodano == 0}
+                        <th class="text-center">Převzít</th>
+                    {else}
+                        <th class="text-center">Typ platby:</th>
+                    {/if}
+                    <th>Vytvořil:</th>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>{$order->datum_vytvoreni}</td>
+                        <td align="center">{$order->celkova_cena} Kč</td>
+                        {if $order->dodano == 0}
+                            <td align="center">NEPŘEVZANÁ</td>
+                        {else}
+                            <td align="center">VYŘÍZENÁ</td>
+                        {/if}
+                        <td align="center">{$order->datum_platby}</td>
+                        <td>{$order->dodavatel}</td>
+                        {if $order->dodano == 1}
+                            {if $order->druh_platby == 0}
+                                <td align="center">HOTOVĚ</td>
+                            {else}
+                                <td align="center">FAKTURA</td>
+                            {/if}
+                        {else}
+                            <td align="center"><a n:href="HomeUser:choosePayment $order->id_obj"><p data-placement="top" data-toggle="tooltip" title="ChoosePayment"><button class="btn btn-success btn-xs" data-title="ChoosePayment" ><span class="glyphicon glyphicon-ok-sign"></span></button></p></a></td>
+                        {/if}
+
+                        <td>{$order->jmeno_zam}</td>
+                    </tr>
+
+                    <div class="table-responsive">
+                        <table  class="table">
+                            <p>Obsah objednávky:</p>
+                            <tbody>
+                            {foreach $order->obsah as $obsah}
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td>{$obsah->nazev}</td>
+                                    <td>{$obsah->hmotnost} Kg</td>
+                                    <td>{$obsah->syr_cena} Kč</td>
+                                    <td></td>
+                                    <td></td>
+
+                                </tr>
+                            {/foreach}
+                            </tbody>
+                        </table>
+                    </div>
+                {/foreach}
+                </tbody>
+
+                </table>
+                </div>
+            {elseifset $noOrders}
+                <p>Na prodejně nejsou žádné objednávky.</p>
+            {/ifset}
+
+
+        </div>
+    </div>
+</div>

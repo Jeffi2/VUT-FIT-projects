@@ -1,0 +1,16 @@
+{block content}
+{if !$user->isLoggedIn()}
+<p>Permission denied</p>
+{/if}
+{if $user->isLoggedIn()}
+
+
+{foreach $cheese as $one}
+    <tr>
+    <td>{$one->nazev}</td>
+        <td>{$one->typ}</td>
+    </tr>
+    <br>
+{/foreach}
+
+{/if}

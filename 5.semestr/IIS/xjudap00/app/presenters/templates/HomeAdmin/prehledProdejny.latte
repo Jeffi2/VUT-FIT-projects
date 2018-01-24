@@ -1,0 +1,72 @@
+{* This is the welcome page, you can delete it *}
+
+{block content}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            {foreach $prodejny as $prodejna}
+            <div class="table-responsive">
+
+                <table id="mytable" class="table table-bordred table-striped">
+                    <p><b>Prodejna:</b></p>
+                    <thead>
+                    <th>Název:</th>
+                    <th>Ulice:</th>
+                    <th>Číslo popisné:</th>
+                    <th>Město:</th>
+                    <th>PSČ:</th>
+                    <th>Editovat</th>
+                    <th>Smazat</th>
+                    </thead>
+                    <tbody>
+
+                        <tr>
+                            <td>{$prodejna->nazev}</td>
+                            <td>{$prodejna->ulice}</td>
+                            <td>{$prodejna->cislo_popisne}</td>
+                            <td>{$prodejna->mesto}</td>
+                            <td>{$prodejna->psc}</td>
+                            <td><a n:href="updateProd! $prodejna->id_pro"><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></a></td>
+                            <td><a n:href="deleteProd! $prodejna->id_pro"><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" ><span class="glyphicon glyphicon-trash"></span></button></p></a></td>
+                        </tr>
+                        {ifset $prodejna->zamestnanci}
+                        <div class="table-responsive">
+                            <table id="mytable" class="table">
+
+                                <thead>
+                                <th></th>
+                                <th>Jméno:</th>
+                                <th>Příjmení:</th>
+                                <th>Login:</th>
+                                <th>Plat:</th>
+                                <th>Telefon</th>
+                                </thead>
+                                <tbody>
+                                {foreach $prodejna->zamestnanci as $zam}
+                                <tr>
+                                    <td></td>
+                                    <td>{$zam->jmeno}</td>
+                                    <td>{$zam->prijmeni}</td>
+                                    <td>{$zam->login}</td>
+                                    <td>{$zam->plat}</td>
+                                    <td>{$zam->telefon}</td>
+                                </tr>
+                                {/foreach}
+                                </tbody>
+                            </table>
+                        </div>
+                        {/ifset}
+                    {/foreach}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+

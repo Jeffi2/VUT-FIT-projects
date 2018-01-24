@@ -1,0 +1,41 @@
+{block content}
+<div class="container">
+    <div class="form-horizontal">
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <h2>Vyberte způsob platby:</h2>
+                <hr>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="panel panel-login">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                              <span class="align-middle input-group-addo">
+                                <p>* Druh platby:</p>
+                                </span>
+                            </div>
+                            {form choosePayment}
+                            <div class="form-group">
+                                {input druh_platby}
+                            </div>
+
+                        <div class="modal-footer ">
+                            {input prevzit}
+                        </div>
+                        {/form}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

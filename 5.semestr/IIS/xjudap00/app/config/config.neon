@@ -1,0 +1,31 @@
+# WARNING: it is CRITICAL that this file & directory are NOT accessible directly via a web browser!
+# http://nette.org/security-warning
+
+nette:
+database:
+	dsn: 'mysql:host=wm146.wedos.net;dbname=d161071_iis'
+	user: a161071_iis
+	password: gw8uWua4
+
+parameters:
+
+php:
+	date.timezone: Europe/Prague
+
+
+application:
+	errorPresenter: Error
+	mapping:
+		*: App\*Module\Presenters\*Presenter
+
+
+session:
+    autoStart: true # výchozí hodnota je 'smart'expiration: 14 days
+
+services:
+	- App\Model\iis_database
+	- App\Model\loginManager
+	router: App\RouterFactory::createRouter
+	nette.latteFactory:
+	    setup:
+	        - setTempDirectory(null)

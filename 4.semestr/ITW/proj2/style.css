@@ -1,0 +1,321 @@
+* {
+padding:0px;
+margin:0px; 
+}
+
+body {
+	background: #CCCCCC;    
+  background-size:cover;
+  background-repeat:no-repeat;
+	margin: 0px;
+	font: 14px Verdana;
+	min-width: 960px;
+}
+
+a{
+	text-decoration:none;
+}
+
+a:hover{
+	text-decoration: underline;
+}
+
+header {
+	height: 66px;
+  	background-color:#06799F; 
+}
+
+header nav ul {
+	margin: 0px;
+	list-style-type: none;  
+}
+
+header nav ul li {
+	float: left;
+	padding: 0px 26px;
+	margin: 0 5px;
+	font-size: 17px;
+	line-height: 66px ;	
+  font-family:'Ubuntu', serif; 
+  border-radius: 5px; 
+  position:relative;
+}
+
+header nav a {
+	color: white;
+	text-decoration: none;
+}
+
+header nav a:hover {
+	text-decoration: none;
+	color: white;
+	text-decoration: none;
+	color: #FFB400;
+}
+
+header nav ul li:hover, .aktivni {
+	background-color:#024E68;
+	box-shadow: 0px 0px 15px gray;
+}
+
+.centr {
+width:900px;
+height:64px;
+margin-left:auto;
+margin-right:auto;
+}
+
+#logo {
+	width: 300px;
+	height: 40px;
+	float: left;
+	margin: 15px 0px 0px 0px;    
+}
+
+#logo a{
+	font-family: 'Indie Flower', cursive;
+	font-size: 24px;
+	margin-top: 20px;
+	color: white;
+}
+
+#logo a:hover{
+	text-decoration: none;
+	color: #FFB400;
+}
+
+#autor{
+	float: left;
+	margin-top: 10px;
+}
+
+#autor p{
+	margin-left: 10px;
+}
+
+#odkazy li{
+	margin-left: 20px;
+}
+
+#odkazy a{
+	color:#06799F;
+}
+
+#validator {
+	margin-left: 20px;
+	margin-right: 20px;
+	float: right;
+	width: 40px;
+	height: 40px;
+}
+
+#background{
+	background: rgba(255,255,255,0.5);
+	float: left;
+	width: 100%;
+}
+
+.uskoc li{
+	margin-left: 20px;
+}
+
+#odkazy{
+	text-align: left;
+	margin-left: 20px;
+	font-size: 14px;
+	margin-bottom: 20px;
+}
+
+#main{
+	width: 80%;
+	overflow: visible;
+	margin: auto;
+	margin-bottom: 0px;
+}
+
+#topimage{
+	width: 100%;
+	margin: 0px;
+
+}
+
+.sizer img{
+	width: 100%;
+}
+
+#col1{
+	float: left;
+	width: 50%;
+}
+
+#split a{
+	color:#06799F;
+}
+
+.big{
+	font-size: 21px;
+	color: #06799F;
+	margin-bottom: 10px;
+}
+
+#split a:hover{
+	text-decoration: none;
+}
+
+.tabeltext{
+	color: black;
+	text-align: left;
+	font-size: 16px;
+	width: 70%;
+	padding-right: 40px;
+}
+
+#fullsize{
+	width: 100%;
+}
+
+.contenttable{
+	width: 100%;
+}
+
+.contenttable img{
+	margin: 10px;
+	width: 80%;
+	margin-bottom: 20px;
+}
+
+.hoverback{
+	margin-top: 10px;
+	background: rgba(255,255,255,0.5);
+}
+.hoverbackn{
+	margin-top: 10px;
+	background: rgba(255,255,255,0.5);
+}
+
+.hoverback:hover{
+	background: #06799F;
+	color: #FFB400;
+}
+
+#frame{
+	border:0;
+}
+
+#col2{
+	float: right;
+	width: 50%;
+}
+
+.coltext{
+	color: black;
+	text-align: left;
+	margin: 20px;
+	font-size: 14px;
+}
+
+#topimage img{
+	width: 100%;
+	margin-bottom: -3px;
+}
+
+#news{
+	width: 20%;
+	float: left;
+}
+
+#newstext{
+	font-size: 14px;
+	width: 90%;
+	float: left;
+	padding-top: 10px;
+	text-align: left;
+	margin-left: 5%;
+	background: rgba(255,255,255,0.5);
+	border: 1px dashed rgb(12,87,161);
+	display: block;
+}
+
+#newone{
+	color: white;
+	background-color:#06799F; 
+	border: 1px solid #06799F;;
+	margin-left: 5%;
+	float: left;
+	width: 90%;
+}
+
+#newone p{
+	margin-top: 5px;
+}
+
+#newstext ul {
+	list-style-type: none;
+}
+
+#newstext ul li{
+	margin-top: 5px;
+	padding-left: 5%;
+	margin-bottom: 10px;
+}
+
+
+#nadpis{
+	margin-top: 10px;
+	color: #06799F;
+	text-align: center;
+	font-size: 24px;
+	font-family: times;
+}
+
+#content{
+	margin-top: 10px;
+	margin-bottom: 30px;
+	float: right;
+	width: 80%;
+}
+
+#content p{
+	margin-right: 20px;
+}
+
+#validator:hover {
+	background-color:#FFB400;
+	border-radius:10%;
+}
+
+#validator img{
+	margin-top: 4px;
+}
+
+#mapa{
+	width: 100px;
+	height: 40px;
+	float: right;
+	color: white;
+}
+
+#mapa p{
+	margin-top: 10px;
+}
+
+#mapa:hover{
+	background-color:#FFB400;
+	border-radius:10%;
+}
+
+#mapa a{
+	color: white;
+	text-decoration: none;
+}
+footer {
+clear: both;
+  position: relative;
+  bottom: 0;
+  left: 0;
+  height: 40px;
+  background-color:#06799F;
+  width: 100%;
+  text-align:center;
+  color:white;
+}

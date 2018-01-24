@@ -1,0 +1,147 @@
+{* This is the welcome page, you can delete it *}
+
+{block content}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h4>Přehled nabízených sýrů:</h4>
+            {ifset $nabizeneSyry}
+            <div class="table-responsive">
+
+                <table id="mytable" class="table table-bordred table-striped">
+
+                    <thead>
+                    <th>Název:</th>
+                    <th>Živočich:</th>
+                    <th>Tuk: (%)</th>
+                    <th>Typ:</th>
+                    <th>Země původu:</th>
+                    <th>Cena za Kg:</th>
+                    <th class="text-center">Upravit cenu</th>
+                    <th class="text-center">Smazat nabídku</th>
+                    </thead>
+                    <tbody>
+                        {foreach $nabizeneSyry as $syr}
+                        <tr>
+                            <td>{$syr->nazev}</td>
+                            <td>{$syr->zivocich}</td>
+                            <td>{$syr->tuk}</td>
+                            <td>{$syr->typ}</td>
+                            <td>{$syr->zeme_nazev}</td>
+                            <td>{$syr->cena} Kč</td>
+                            <td align="center"><a n:href="update! $syr->id_syr, $user->id[0]->login, $syr->cena"><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></a></td>
+                            <td align="center"><a n:href="delete! $syr->id_syr, $user->id[0]->login"><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" ><span class="glyphicon glyphicon-trash"></span></button></p></a></td>
+                        </tr>
+                        {/foreach}
+                    </tbody>
+
+                </table>
+
+            </div>
+            {elseifset $noCheese}
+                <p>Nejsou evidovány žádné nabízené sýry.</p>
+            {/ifset}
+
+
+        </div>
+    </div>
+</div>
+
+{form regCheeseForm}
+    <div class="container">
+        <div class="form-horizontal">
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    <h2>Přidat nabízený sýr:</h2>
+                    <hr>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <div class="panel panel-login">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                        <span class="align-middle input-group-addo">
+                                        <p>* Název sýru:</p>
+                                    </span>
+                                </div>
+                                <div class="form-group">
+                                    {input nazev}
+                                </div>
+                                <div class="form-group">
+                                        <span class="align-middle input-group-addo">
+                                        <p>* Cena v Kč/Kg:</p>
+                                    </span>
+                                </div>
+                                <div class="form-group">
+                                    {input cena}
+                                </div>
+                                <div class="form-group">
+                                        <span class="align-middle input-group-addo">
+                                        <p>* Živočich:</p>
+                                    </span>
+                                </div>
+                                <div class="form-group">
+                                    {input zivocich}
+                                </div>
+                                <div class="form-group">
+                                        <span class="align-middle input-group-addo">
+                                        <p>* Typ sýru:</p>
+                                    </span>
+                                </div>
+                                <div class="form-group">
+                                    {input typ}
+                                </div>
+                                <div class="form-group">
+                                        <span class="align-middle input-group-addo">
+                                        <p>* Procento tuku: (0-100):</p>
+                                    </span>
+                                </div>
+                                <div class="form-group">
+                                    {input tuk}
+                                </div>
+                                <div class="form-group">
+                                        <span class="align-middle input-group-addo">
+                                        <p>* Trvanlivost: ve dnech (1-365):</p>
+                                    </span>
+                                </div>
+                                <div class="form-group">
+                                    {input syr_trvanlivost}
+                                </div>
+                                <div class="form-group">
+                                        <span class="align-middle input-group-addo">
+                                        <p>Země původu:</p>
+                                    </span>
+                                </div>
+                                <div class="form-group">
+                                    {input id_zem}
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-sm-6 col-sm-offset-3">
+                                            {$form['send']->control}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                        <span class="align-middle input-group-addo">
+                                        <p>* povinné položky</p>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{/form}

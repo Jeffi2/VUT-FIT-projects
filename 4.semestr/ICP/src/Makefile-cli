@@ -1,0 +1,23 @@
+# ICP - projekt Solitaire Makefile (xjerab21, xjudap00)
+
+
+NAME=hra2017-cli
+OBJFILES= card.o CardDeck.o FactoryKlondike.o CardStack.o target.o working.o GameCore.o cli_loop.o main_cli.o
+
+CC=g++
+CFLAGS=-std=c++11 -pedantic 
+#-lm
+
+# univerzalni pravidlo pro generovani vsech objektovych souboru
+%.o : %.cpp
+	$(CC) $(CFLAGS) -c $<
+
+# Startovaci pravidlo
+all: $(NAME)
+
+# Slinkovani vsech objektovych souboru do jednoho spustitelneho programu .
+$(NAME): $(OBJFILES)
+	$(CC) $(CFLAGS) $(OBJFILES) -o $@
+
+clean:
+	rm $(OBJFILES) $(NAME)

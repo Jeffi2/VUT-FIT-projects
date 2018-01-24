@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="IJA-projekt" default="run" basedir=".">
+    <description>ANT build pro IJA projekt 2016/17</description>
+
+   <target name="compile" depends="generate-build,generate-jar,generate-javadoc" />
+
+    <target name="run" depends="compile">	
+  		<java classname="ija2016.Main" fork="true">
+            <classpath>
+                <path location="dest-client/ija-client.jar"/>
+            </classpath>
+        </java>
+    </target>
+
+    <target name="generate-build">
+        <mkdir dir="build"/>
+        <exec executable="chmod" dir="lib" failonerror="true">
+            <arg line="+x get-libs.sh" />
+        </exec>
+        <property name="fullPath"
+            location="./lib/get-libs.sh"/>
+        <exec executable="/bin/bash" failonerror="true">
+            <arg value="${fullPath}"/>
+        </exec>
+        <javac srcdir="src" destdir="build" encoding="UTF-8" includeantruntime="false">
+            <classpath>
+                <fileset dir="lib">
+                    <include name="*.jar"/>
+                </fileset>
+            </classpath>
+        </javac>
+    </target>
+    
+    <target name="generate-jar">
+        <mkdir dir="dest-client"/>
+        <jar jarfile="dest-client/ija-client.jar" basedir="build" compress="true">
+            <manifest>
+                <attribute name="Main-Class" value="ija2016.Main"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="generate-javadoc">
+    <mkdir dir="doc"/>
+        <javadoc encoding="UTF-8" charset="UTF-8" sourcepath="src/ija" destdir="doc" windowtitle="Projekt IJA - Solitaire Klondike">
+        </javadoc>
+    </target>
+
+    <target name="clean">
+        <delete includeemptydirs="true" failonerror="false">
+            <fileset dir="build" includes="**/*"/>
+            <fileset dir="dest-client" includes="**/*"/>
+            <fileset dir="doc" includes="**/*"/>
+            <fileset dir="src/ija/ija2016/images" includes="**/*"/>
+        </delete>
+        <delete file="lib/images.zip"/>
+        <delete dir="build/ija2016" failonerror="false"/>
+        <delete dir="src/ija/ija2016/images" failonerror="false"/>
+    </target>
+
+</project>

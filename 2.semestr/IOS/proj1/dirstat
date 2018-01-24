@@ -1,0 +1,239 @@
+#!/bin/sh
+#Dirstat.sh ver. 2.0
+#IOS_Proj1 15.3.2016
+#Ukolem scriptu je vypstat informace o souborech a adresarich.
+#Zname bugs: Vykřiky find, při nedostatecnych pravech k adresarum, vykrik rev pri neplatnem multibajtu(pouze ubuntu)
+#Autor: Petr Juda | xjudap00@stud.fit.vutbr.cz
+
+#nastaveni lokalizace
+#LC_ALL=POSIX
+#export LC_ALL
+
+#chybove kody
+ERR_ARG=1
+ERR_DIV=2
+ERR_PER=3
+
+#osetreni argumentu
+bool_arg=0 #nastaveni priznaku -i
+
+while getopts ":i:" opt; do #getops pro nastaveni prepinace -i a argumentu
+  case $opt in
+    i)
+      #echo "Zapnuto s -i, parametr v '$OPTARG': $OPTARG" >&2 #smazat
+      bool_arg=1 #sepnuti ze bylo -i
+      regrex="$OPTARG"
+      export regrex
+      #echo "Regular je: $regrex" #smazat
+      shift $((OPTIND-1))
+      if [ $# -ne 0 ] #pokud je za -i jeste argument, zkusi nacist cestu
+      	then
+      		cesta="$@"
+      		#test na existenci a pristupu do slozky
+					cd $cesta || {
+					echo "Nelze se prepnout do slozky zadane argumentem." >&2
+					exit $ERR_ARG
+					}
+      fi
+      ;;
+    \?)
+      echo "Nepovoleny prepinac!: -$OPTARG" >&2
+      exit $ERR_ARG
+      ;;
+    :)
+      echo "Prepinac -$OPTARG vyzaduje argument." >&2
+      exit $ERR_ARG
+      ;;
+  esac
+done
+
+#zadny argument
+if [ $# -eq 0 ] 
+	then 
+		cesta=$PWD
+	#	echo "Root directory: $cesta" #smazat
+elif [ $bool_arg -eq 0 ]
+	then
+		cesta="$@"
+		#test na existenci a pristupu do slozky bez parametru -i
+		cd $cesta || {
+			echo "Nelze se prepnout do slozky zadane argumentem." >&2
+			exit $ERR_ARG
+		}
+	#	echo "Root directory: $cesta" #smazat
+fi
+echo "Root directory: $PWD" #nechat
+################################################## up OK
+
+#zde presmerovat stderr do null, kvuli chybam v pristupu find
+tester=0
+find . -print 2>&1 | grep 1>/dev/null -E '^find: .*Permission denied$'; if [ $? -eq 0 ]; then tester=1; fi; 1>/dev/null
+
+if [ $tester -eq 1 ]
+then
+echo "Pristup k nekterym slozkam byl odepren. Spust jako SUDO." >&2
+exit $ERR_PER
+fi
+
+#Vypocet max. hloubky adres. stromu
+if [ $bool_arg -eq 0 ] 
+    then
+	  #prohledava vsechny slozky, spusti novy cisty bash (-c), smaze vsechny znaky krom / z aktualniho adresare ($1) a spocita jejich pocet, seradi a vypise posledni.
+		hloubka=`find . -type d -exec bash -c 'echo $(tr -cd / <<< "$1"|wc -c)' -- {} \; | sort -u | tail -1`
+
+		#inkrementace hloubky, protoze prazdny koren je 1
+		hloubka=$((hloubka+1))
+
+        pocet_souboru=`find . -type f | nl | tail -1 | awk '{print $1}'`
+    if [ -z $pocet_souboru ]
+     then
+      pocet_souboru=0
+    fi
+		pocet_slozek=`find . -type d | nl | tail -1 | awk '{print $1}'`
+
+		if [ -z $pocet_slozek ]
+			then  
+				pocet_slozek=1
+		fi
+
+		if [ $pocet_souboru -eq 0 ]
+		then
+			max_soubor='N/A'
+			prumer_souboru='N/A'
+			median='N/A'
+		else
+			max_soubor=`find . -type f -print0  | xargs -0 ls -laS | grep -v -e "^d" | grep -v "^total" | awk '{print $5}' | head -1`
+			velikost_souboru=`find . -type f -print0  | xargs -0 ls -laS | grep -v -e "^d" | grep -v "^total" | awk '{total += $5}; END{print total}'`
+			prumer_souboru=$((velikost_souboru/pocet_souboru))
+			zbytek=$((pocet_souboru%2))
+			if [ $zbytek -eq 0 ]
+				then
+					stred=$((pocet_souboru/2))
+					median=`find . -type f -print0  | xargs -0 ls -laS | grep -v -e "^d" | grep -v "^total" |awk -v cislo="$stred" 'NR==cislo || NR==cislo+1 {soucet += $5}; END{print int(soucet/2)}'`
+				else
+					stred=$((pocet_souboru/2))
+					stred=$((stred+1))
+					median=`find . -type f -print0  | xargs -0 ls -laS | grep -v -e "^d" | grep -v "^total" | awk -v cislo="$stred" 'NR==cislo {print $5}'`
+			fi
+		fi
+    if [ $pocet_souboru -ne 0 ] && [ $max_soubor -eq 0 ]
+        then
+            max_soubor="N/A"
+    fi
+    echo 'Directories: '"$pocet_slozek" #nechat
+    echo 'Max depth: '"$hloubka" #nechat
+    echo 'Average no. of files: '"$((pocet_souboru/pocet_slozek))" #nechat
+    echo 'All files: '"$pocet_souboru" #nechate
+    echo '  Largest file: '"$max_soubor" #nechat
+    echo '  Average file size: '"$prumer_souboru" #nechat
+    echo '  File size median: '"$median" #nechat
+
+    echo 'File extensions: '"$(find . -type f -exec bash -c 'echo "$1" | rev | cut -d"/" -f1 | rev ' -- {} \; | sed s/.//1 | grep '\.' | rev | cut -f1 -d\. | rev | sort -u | grep '^[[:alnum:]]*$' | awk '{printf("%s,",$1);}' | rev | sed s/.//1 | rev)"
+
+	find . -type f -exec bash -c 'echo "$1" | rev | cut -d"/" -f1 | rev ' -- {} \; | sed s/.//1 | grep '\.' | rev | cut -f1 -d\. | rev | sort -u | grep '^[[:alnum:]]*$' | while read line; do
+		pocet_pripona=`find . -type f -print0 | xargs -0 ls -laS | grep -v -e "^d" | grep -v "^total" | grep -e [^/\]'\.'"$line"$ | nl | tail -1 | awk '{print $1}'`
+		echo 'Files .'"$line"': '"$pocet_pripona"
+		max_pripona=`find . -type f -print0 | xargs -0 ls -laS | grep -v -e "^d" | grep -v "^total" | grep -e [^/\]'\.'"$line"$ | awk '{print $5}' | head -1`
+		echo '  Largest file .'"$line"': '"$max_pripona"
+		velikost_pripona=`find . -type f -print0 | xargs -0 ls -laS | grep -v -e "^d" | grep -v "^total" | grep -e [^/\]'\.'"$line"$ | awk '{total += $5}; END{print total}'`
+		prumer_pripona=$((velikost_pripona/pocet_pripona))
+		echo '  Average file size .'"$line"': '"$prumer_pripona"
+		med_test=$((pocet_pripona%2))
+			if [ $med_test -eq 0 ]
+				then
+					stred=$((pocet_pripona/2))
+					median=`find . -type f -print0 | xargs -0 ls -laS | grep -v -e "^d" | grep -v "^total" | grep -e [^/\]'\.'"$line"$ | awk -v cislo="$stred" 'NR==cislo || NR==cislo+1 {soucet += $5}; END{print int(soucet/2)}'`
+				else
+					stred=$((pocet_pripona/2))
+					stred=$((stred+1))
+					median=`find . -type f -print0 | xargs -0 ls -laS | grep -v -e "^d" | grep -v "^total" | grep -e [^/\]'\.'"$line"$ | awk -v cislo="$stred" 'NR==cislo {print $5}'`
+			fi
+		echo '  File size median .'"$line"': '"$median"
+	done
+
+else
+	#echo vetev i
+    #ZACATEK PREPINACE NA OSTRO
+
+    slozky_all=`find . -type d | while read arg; do  echo $arg |  sed s/.//1 | sed s:/::1 | tr '/' '\n' | grep  -E "$regrex"; if [ $? -eq 1 ] ; then printf "%s\n" "$arg" ; fi ; done | grep '\.'/ `
+    soubory_all=`find . -type f | while read arg; do  echo $arg |  sed s/.//1 | sed s:/::1 | tr '/' '\n' | grep  -E "$regrex"; if [ $? -eq 1 ] ; then printf "%s\n" "$arg" ; fi ; done  | grep '\.'/ `
+
+    hloubka=`echo "$slozky_all" |  while read polozka ; do echo "$polozka" | echo $(tr -cd /)| wc -c  ;  done | sort -u | nl | tail -1 | awk '{print $2}'`
+
+    if [ -z $hloubka ]
+        then
+        hloubka=1
+    fi
+
+
+ 	pocet_souboru=`echo "$soubory_all" | nl | tail -1 | awk '{print $1}'`
+    if [ -z $pocet_souboru ]
+   		then
+      	pocet_souboru=0
+    fi
+
+    #pocet_slozek=`find . -type d -exec bash -c 'echo "$1" | sed s/.//1 | sed s:/::1 | tr '/' '\n' | grep  -E "$regrex"; if [ $? -eq 1 ] ; then echo $1  ; fi ; ' -- {} \; | grep '\.'/ | nl | tail -1 | awk '{print $1}'`
+    #pocet_slozek=`find . -type d -exec bash -c 'echo "$1" | sed s/.//1 | sed s:/::1 | tr / \\n | grep  -E "^a"; if [ $? -eq 1 ] ; then echo $1 ; fi ; ' -- {} \;`
+    pocet_slozek=`echo "$slozky_all" | nl | tail -1 | awk '{print $1}'`
+
+    pocet_slozek=$((pocet_slozek+1))
+
+	if [ $pocet_souboru -eq 0 ]
+	then
+		max_soubor='N/A'
+		prumer_souboru='N/A'
+		median='N/A'
+	else
+		max_soubor=`echo "$soubory_all" | tr '\n' '\0' | xargs -0 ls -laS | grep -v -e "^d" | grep -v "^total" | awk '{print $5}' | head -1`
+		velikost_souboru=`echo "$soubory_all" | tr '\n' '\0' | xargs -0 ls -laS | grep -v -e "^d" | grep -v "^total" | awk '{total += $5}; END{print total}'`
+		prumer_souboru=$((velikost_souboru/pocet_souboru))
+		zbytek=$((pocet_souboru%2))
+		if [ $zbytek -eq 0 ]
+			then
+				stred=$((pocet_souboru/2))
+				median=`echo "$soubory_all" | tr '\n' '\0' | xargs -0 ls -laS | grep -v -e "^d" | grep -v "^total" | awk -v cislo="$stred" 'NR==cislo || NR==cislo+1 {soucet += $5}; END{print int(soucet/2)}'`
+			else
+				stred=$((pocet_souboru/2))
+				stred=$((stred+1))
+				median=`echo "$soubory_all" | tr '\n' '\0' | xargs -0 ls -laS | grep -v -e "^d" | grep -v "^total" | awk -v cislo="$stred" 'NR==cislo {print $5}'`
+		fi
+    fi
+    if [ $pocet_souboru -ne 0 ] && [ $max_soubor -eq 0 ]
+        then
+            max_soubor="N/A"
+    fi
+    echo 'Directories: '"$pocet_slozek" #nechat
+    echo 'Max depth: '"$hloubka" #nechat
+    echo 'Average no. of files: '"$((pocet_souboru/pocet_slozek))" #nechat
+    echo 'All files: '"$pocet_souboru" #nechate
+    echo '  Largest file: '"$max_soubor" #nechat
+    echo '  Average file size: '"$prumer_souboru" #nechat
+    echo '  File size median: '"$median" #nechat
+
+    echo 'File extensions: '"$(echo "$soubory_all" |  rev | cut -d"/" -f1 | rev | sed s/.//1 | grep '\.' | rev | cut -f1 -d\. | rev | sort -u | grep '^[[:alnum:]]*$' | awk '{printf("%s,",$1);}' | rev | sed s/.//1 | rev)"
+
+    echo "$soubory_all" |  rev | cut -d"/" -f1 | rev | sed s/.//1 | grep '\.' | rev | cut -f1 -d\. | rev | sort -u | grep '^[[:alnum:]]*$' | while read line; do
+	pocet_pripona=`echo "$soubory_all" | tr '\n' '\0'  | xargs -0 ls -laS | grep -v -e "^d" | grep -v "^total" | grep -e [^/\]'\.'"$line"$ | nl | tail -1 | awk '{print $1}'`
+	echo 'Files .'"$line"': '"$pocet_pripona"
+	max_pripona=`echo "$soubory_all" | tr '\n' '\0' | xargs -0 ls -laS | grep -v -e "^d" | grep -v "^total" | grep -e [^/\]'\.'"$line"$ | awk '{print $5}' | head -1`
+	echo '  Largest file .'"$line"': '"$max_pripona"
+	velikost_pripona=`echo "$soubory_all" | tr '\n' '\0' | xargs -0 ls -laS | grep -v -e "^d" | grep -v "^total" | grep -e [^/\]'\.'"$line"$ | awk '{total += $5}; END{print total}'`
+	prumer_pripona=$((velikost_pripona/pocet_pripona))
+	echo '  Average file size .'"$line"': '"$prumer_pripona"
+
+	med_test=$((pocet_pripona%2))
+		if [ $med_test -eq 0 ]
+			then
+				stred=$((pocet_pripona/2))
+				median=`echo "$soubory_all" | tr '\n' '\0'  | xargs -0 ls -laS | grep -v -e "^d" | grep -v "^total" | grep -e [^/\]'\.'"$line"$ | awk -v cislo="$stred" 'NR==cislo || NR==cislo+1 {soucet += $5}; END{print int(soucet/2)}'`
+			else
+				stred=$((pocet_pripona/2))
+				stred=$((stred+1))
+				median=`echo "$soubory_all" | tr '\n' '\0' | xargs -0 ls -laS | grep -v -e "^d" | grep -v "^total" | grep -e [^/\]'\.'"$line"$ | awk -v cislo="$stred" 'NR==cislo {print $5}'`
+		fi
+	echo '  File size median .'"$line"': '"$median"
+    done
+#konec vetve i xargs -0 ls -laS | grep -v -e "^d" | grep -v "^total" |
+fi
+
+exit 0

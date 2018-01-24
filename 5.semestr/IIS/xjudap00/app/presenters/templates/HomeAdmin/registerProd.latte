@@ -1,0 +1,90 @@
+{* This is the welcome page, you can delete it *}
+
+{block content}
+{form regProdForm}
+<div class="container">
+    <div class="form-horizontal">
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <h2>Přidat novou prodejnu</h2>
+                <hr>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="panel panel-login">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                        <span class="align-middle input-group-addo">
+                                        <p>* Název prodejny:</p>
+                                    </span>
+                            </div>
+                            <div class="form-group">
+                                {input nazev}
+                            </div>
+                            <div class="form-group">
+                                        <span class="align-middle input-group-addo">
+                                        <p>* Ulice:</p>
+                                    </span>
+                            </div>
+                            <div class="form-group">
+                                {input ulice}
+                            </div>
+                            <div class="form-group">
+                                        <span class="align-middle input-group-addo">
+                                        <p>* Číslo popisné:</p>
+                                    </span>
+                            </div>
+                            <div class="form-group">
+                                {input cislo_popisne}
+                            </div>
+                            <div class="form-group">
+                                        <span class="align-middle input-group-addo">
+                                        <p>* Město:</p>
+                                    </span>
+                            </div>
+                            <div class="form-group">
+                                {input mesto}
+                            </div>
+                            <div class="form-group">
+                                        <span class="align-middle input-group-addo">
+                                        <p>* PSČ:</p>
+                                    </span>
+                            </div>
+                            <div class="form-group">
+                                {input psc}
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-6 col-sm-offset-3">
+                                        {$form['send']->control}
+                                    </div>
+                                </div>
+                            </div>
+                            {ifset $dbERR}
+                                <div class="form-group">
+                                        <span class="text-danger align-middle input-group-addo">
+                                        <p>{$dbERR}</p>
+                                    </span>
+                                </div>
+                            {/ifset}
+                            <div class="form-group">
+                                        <span class="align-middle input-group-addo">
+                                        <p>* povinné položky</p>
+                                    </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/form}

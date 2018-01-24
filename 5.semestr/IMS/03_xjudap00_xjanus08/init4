@@ -1,0 +1,12 @@
+DELKA_SIMULACE	8.5			        v hodinach
+ZASOBNIK_NA_SMETANU	49000		       	v kg
+SMETANA_V_ZASOBNIKU	49000		    	v kg , kolik smetany je na pocatku v zasobniku
+SMETANA_DO_ZMASELNOVACE	9000			mnozstvi masla za jeden cyklus v kg
+CAS_ZMASELNOVANI	1.03 1.38		interval jak dlouho zmaselnovac pracuje
+CAS_CERPANI	1		                za jak dlouho se precerpa kg masla
+CAS_BALENI	0.3		                delka baleni jedne kostky masla
+VELIKOST_KRABIC	20			        kolik masla se vleze do krabice
+OBSALUHA	2		                počet lidi balící maslo do krabiic
+BALICI_PLOCHA	200			        kapacita balici plochy
+MASLO_Z_PREDCHOZI_SMENY	4482			pocatecni zaplneni sila s maslem
+DELKA_FOLIE 16000               	        delka folie v jednotkach masla

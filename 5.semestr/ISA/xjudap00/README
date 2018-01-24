@@ -1,0 +1,59 @@
+Projekt: ISA - Klient POP3 s podporou TLS
+Autor: Petr Jůda (xjudap00)
+
+Popis programu:
+
+Program popcl umožňuje stahování emailových zpráv pomocí protokolu POP3. Zprávy jsou ukládány jako jednotlivé soubory do zvolené výstupní složky ve formátu IMF.
+Soubory jsou pojmenovávány ve tvaru "uživatelské jméno" + "_" + "ip adresa serveru" + "_" + "unikátní číslo zprávy ve výstupní složce". Tento název je zvolen tak, aby 
+nedocházelo k žádnému přepisování zpráv ve výstupní složce. Je podporováno šifrované (TSL) i nešifrované spojení s případnou možností přechodu na šifrované pomocí STARTTLS.
+Pro možnost stahování pouze nových emailů je v adresáři s binárním souborem vytvořena složka "database", do které se ukládají záznamy o UID (pokud server podproruje), případně
+Message-Id již stažených zpráv. 
+
+Omezení: Pro správnou funkčnost stahování pouze nových zpráv nesmí server během svého provozu změnit svoji IP adresu. Pokud server nepodporuje příkaz "UIDL" může nastat problém
+s rozpoznáváním nových zpráv u těch, které by neobsahovaly položku Message-ID. (Odeslané zprávy by jej však měly obsahovat.)
+
+Příklad spuštění:
+
+    ./popcl <server> -a <auth_file> -o <out_dir> [-p <port>] [-T|-S [-c <certfile>] [-C <certaddr]] [-d] [-n] [-h/--help]
+    <server>       - povinný parametr specifikující URL nebo IPv4/IPv6 adresu serveru 
+    -a <auth_file> - povinný parametr specifikující soubor s přihlašovacím jménem a heslem ve stanoveném formátu
+    -o <out_dir>   - povinný parametr specifikující specifikující výstupní složku pro ukládání stahovaných zpráv
+    -p <port>      - volitelný parametr specifikující číslo portu (výchozí 995 pro TLS a 110 pro nezabezbečené/STARTTLS připojení)
+    -T             - volitelný parametr specifikující TLS připojení (nelze kompinovat s -S)
+    -S             - volitelný parametr specifikující STARTTLS připojení (nelze kombinovat s -T)
+    -c <certfile>  - volitelný parametr specifikující cestu k cetifikátu. (lze použít pouze s -S nebo -T)
+    -C <certaddr>  - volitelný parametr specifikující cestu k adresáři s certifikáty (lze použít pouze s -S nebo -T)
+    -d             - volitelný parametr specifikující zda se mají stažené zprávy ze serveru smazat
+    -n             - volitelný parametr specifikující stažení pouze nových (dosud nestažených zpráv)
+    -h / --help    - volitelný parametr pro výpis nápovědy
+
+Návratové hodnoty:
+
+	- 0 vše v pořádku
+	- 1 špatné vstupní parametry programu
+	- 2 zadaný soubor nebo složka neexistuje
+	- 3 špatná struktura <auth_file>
+	- 4 problém s připojením k serveru
+	- 5 problém na straně serveru
+	- 6 špatné přihlašovací údaje
+	- 7 problém s vytvářením výstupních souborů
+
+Odevzdané soubory:
+
+	- main.cpp 
+	- Pop3.h
+	- Pop3.cpp
+	- ParamsParser.h
+	- ParamsParser.cpp
+	- Database.h
+	- Database.cpp
+	- Error.h
+	- Makefile
+	- manual.pdf
+	- README
+
+Testováno na:
+
+	1) Ubuntu 14.04
+	2) Centos 7 (merlin.fit.vutbr.cz)
+	3) MacOS 10.12.6

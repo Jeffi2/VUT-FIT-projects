@@ -1,0 +1,32 @@
+{block content}
+<div class="container">
+    <div class="form-horizontal">
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6" style="margin-bottom: 20px; text-align: center;">
+                <h2>Prodejny zaměstnance:</h2>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container" style="max-width: 90%;">
+    <div class="row">
+    {foreach $data as $item}
+        <div class="col-sm-3" >
+            <div class="card" style="
+    border: 1px solid black;
+    text-align: center;
+    margin: 5px 5px 5px 5px;">
+                <canvas class="header-bg" width="150" height="50" id="header-blur"></canvas>
+                <div class="content">
+                    <h4 class="card-title">{$item["nazev"]}</h4>
+                    <p class="card-text">{$item["ulice"]} {$item["cislo_popisne"]}</p>
+                    <p class="card-text">{$item["psc"]} {$item["mesto"]}</p>
+                    <a n:href="chooseShop! id=>$item->id_pro" class="btn btn-primary" style="margin-top: 30px; margin-bottom: 20%;">Do prodejny</a>
+                </div>
+            </div>
+        </div>
+
+    {/foreach}
+    </div>
+</div>

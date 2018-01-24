@@ -1,0 +1,71 @@
+{* This is the welcome page, you can delete it *}
+
+{block content}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h4>Přehled objednávek:</h4>
+            {ifset $orders}
+                {foreach $orders as $order}
+                <div class="table-responsive">
+
+                <table id="mytable" class="table table-bordred table-striped">
+
+                    <thead>
+                    <th>Datum vytvoření:</th>
+                    <th class="text-center">Celková cena:</th>
+                    <th class="text-center">Stav:</th>
+                    <th class="text-center">Datum platby:</th>
+                    <th>Typ platby:</th>
+                    <th>Vytvořil:</th>
+                    <th>Prodejna:</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{$order->datum_vytvoreni}</td>
+                            <td align="center">{$order->celkova_cena} Kč</td>
+                            {if $order->dodano == 0}
+                            <td align="center"><b>NOVÁ</b></td>
+                            {else}
+                            <td align="center"><b>VYŘÍZENÁ</b></td>
+                            {/if}
+                            <td align="center">{$order->datum_platby}</td>
+                            <td align="center"><b>{$order->druh_platby}</b></td>
+                            <td>{$order->jmeno_zam}</td>
+                            <td>{$order->prodejna}</td>
+                        </tr>
+
+                            <div class="table-responsive">
+                                <table  class="table">
+                                    <p>Obsah objednávky:</p>
+                                  <tbody>
+                                  {foreach $order->obsah as $obsah}
+                                      <tr>
+                                          <td></td>
+                                          <td></td>
+                                          <td>{$obsah->nazev}</td>
+                                          <td>{$obsah->hmotnost} Kg</td>
+                                          <td>{$obsah->syr_cena} Kč</td>
+                                          <td></td>
+                                          <td></td>
+
+                                        </tr>
+                                  {/foreach}
+                            </tbody>
+                                </table>
+                            </div>
+                    {/foreach}
+                    </tbody>
+
+                </table>
+            </div>
+            {elseifset $noOrders}
+                <p>Nemáte žádné objednávky.</p>
+            {/ifset}
+
+
+        </div>
+    </div>
+</div>

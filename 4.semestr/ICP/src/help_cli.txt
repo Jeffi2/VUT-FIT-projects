@@ -1,0 +1,64 @@
+
+HELP:
+------------------------------------------------------------------------------------
+ Card tags: H -> Hearts   (red)
+            D -> Diamonds (red)
+            C -> Clubs    (black)
+            S -> Spades   (black)
+
+------------------------------------------------------------------------------------
+ Commands: 
+    HELP -> for print HELP
+    Q -> back to game
+    E -> EXIT one game
+    EALL -> EXIT ALL games
+
+    S -> SAVE game
+    L -> LOAD game
+
+    U -> undo
+    H -> get possible move
+
+    P -> next card from Pack will be uncovered
+    
+    <mStack> <Stack> -> Move card from top of card Stack to another Stack
+    <Card> <Stack>   -> Move card (with cards above it) to top Stack
+
+------------------------------------------------------------------------------------  
+    <mStack>: P  (Pack)   
+              W1 (Wrk1)   
+              W2 (Wrk2)   
+              W3 (Wrk3)   
+              W4 (Wrk4)   
+              W5 (Wrk5)   
+              W6 (Wrk6)   
+              W7 (Wrk7)
+              TH (TrgH -> target Stack of Hearts)
+              TD (TrgH -> target Stack of Diamonds)
+              TC (TrgH -> target Stack of Clubs)
+              TS (TrgH -> target Stack of Spades)  
+
+    <Stack> : W1 (Wrk1)
+              W2 (Wrk2)
+              W3 (Wrk3)
+              W4 (Wrk4)   
+              W5 (Wrk5)
+              W6 (Wrk6)
+              W7 (Wrk7)
+              TH (TrgH -> target Stack of Hearts)
+              TD (TrgH -> target Stack of Diamonds)
+              TC (TrgH -> target Stack of Clubs)
+              TS (TrgH -> target Stack of Spades)              
+                              
+    <Card> : <Val><Color>
+
+    <Val>:  A,2,3,4,5,6,7,8,9,10,J,Q,K
+    <Color>: H,D,C,S
+------------------------------------------------------------------------------------
+ Exampls: 
+    cmd: P     -> This command uncover next card from Pack
+    cmd: KS W1 -> This command move card with Spade's King to Wrk1
+    cmd: W1 TD -> This command move the top card from Wrk1 to TrgD
+------------------------------------------------------------------------------------
+
+cmd: 

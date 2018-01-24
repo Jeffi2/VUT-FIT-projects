@@ -1,0 +1,67 @@
+{* This is the welcome page, you can delete it *}
+
+{block content}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h4>Přehled uživatelů:</h4>
+            <div class="table-responsive">
+
+                <table id="mytable" class="table table-bordred table-striped">
+
+                    <thead>
+                    <th>Login:</th>
+                    <th>Role:</th>
+
+                    <th class="text-center">Editovat</th>
+                    <th class="text-center">Přihlášení</th>
+                    <th class="text-center">Smazat</th>
+                    </thead>
+                    <tbody>
+                    {foreach $uzivatele as $uzivatel}
+                        <tr>
+                            <td>{$uzivatel->login}</td>
+                            {if $uzivatel->type == 1}
+                                 <td>Admin</td>
+                            {/if}
+                            {if $uzivatel->type == 2}
+                                <td>Zaměstnanec</td>
+                            {/if}
+                            {if $uzivatel->type == 3}
+                                <td>Dodavatel</td>
+                            {/if}
+                            {if $uzivatel->type != 1}
+                                <td align="center"><a n:href="update! $uzivatel->login, $uzivatel->type"><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></a></td>
+                            {else}
+                                <td></td>
+                            {/if}
+                            {if $uzivatel->type != 1}
+                            {if $uzivatel->can_log == 1}
+                                <td align="center"><a n:href="block! $uzivatel->login"><p data-placement="top" data-toggle="tooltip" title="Block"><button class="btn btn-success btn-xs" data-title="Block" ><span class="glyphicon glyphicon-ok-sign"></span></button></p></a></td>
+                            {else}
+                                <td align="center"><a n:href="unblock! $uzivatel->login"><p data-placement="top" data-toggle="tooltip" title="Unblock"><button class="btn btn-danger btn-xs" data-title="Unlock" ><span class="glyphicon glyphicon-remove-sign"></span></button></p></a></td>
+                            {/if}
+                            {else}
+                                <td></td>
+                            {/if}
+
+                            {if $user->id[0]->login != $uzivatel->login}
+                                <td align="center"><a n:href="delete! $uzivatel->login, $uzivatel->type"><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" ><span class="glyphicon glyphicon-trash"></span></button></p></a></td>
+                            {else}
+                                <td></td>
+                            {/if}
+                        </tr>
+                    {/foreach}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+

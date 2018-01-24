@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<!--  Bootstrap start  -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/our.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+	<!--  Bootstrap end  -->
+	<title>{ifset title}{include title|stripHtml} | {/ifset}IIS - Prodejny sýrů</title>
+</head>
+
+<body>
+<div n:foreach="$flashes as $flash" style="text-align:center;" class="flash {$flash->type}">
+    {$flash->message}
+</div>
+<nav class="navbar navbar-inverse">
+	<div class="container-fluid">
+		<div class="navbar-header">
+            <a class="navbar-brand" n:href="Homepage:default">
+                <img src="assets/cheese.svg" width="25" height="25" alt="Sýr">
+            </a>
+            {if $user->isInRole('staff')}
+            		<a class="navbar-brand" n:href="Homepage:default">Prodejny sýrů</a>
+				{elseif $user->isInRole('admin')}
+					<a class="navbar-brand" n:href="Homepage:default">Přehled uživatelů</a>
+				{elseif $user->isInRole('supplier')}
+					<a class="navbar-brand" n:href="Homepage:default">Nabízené sýry</a>
+				{else}
+					<a class="navbar-brand" n:href="Homepage:default">Login</a>
+			{/if}
+		</div>
+		<ul class="nav navbar-nav">
+            {if $user->isInRole('staff')}
+				{ifset $showOrders}
+					<li><a class="navbar-brand" n:href="HomeUser:showOrders $id_prodejny">Přehled objednávek</a></li>
+				{/ifset}
+				<li><a class="navbar-brand" n:href="HomeUser:findCheese">Vyhledat sýr</a></li>
+            {/if}
+            {if $user->isInRole('supplier')}
+				<li><a class="navbar-brand" n:href="HomeDod:orders  $user->id[0]->login">Přehled objednávek</a></li>
+            {/if}
+            {if $user->isInRole('admin')}
+			<li><a n:href="HomeAdmin:registerUser"></a></li>
+				<li class="dropdown">
+					<a class="dropdown-toggle" data-toggle="dropdown" href="#">Přidat uživatele
+						<span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li><a n:href="HomeAdmin:registerAdmin">Administrátor</a></li>
+						<li><a n:href="HomeAdmin:registerUser">Zaměstnanec</a></li>
+					</ul>
+				</li>
+				<li><a n:href="HomeAdmin:prehledProdejny"></a></li>
+				<li class="dropdown">
+					<a class="dropdown-toggle" data-toggle="dropdown" href="#">Prodejny
+						<span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li><a n:href="HomeAdmin:prehledProdejny">Přehled prodejen</a></li>
+						<li><a n:href="HomeAdmin:registerProd">Přidat novou prodejnu</a></li>
+					</ul>
+				</li>
+			{/if}
+		</ul>
+		<ul class="nav navbar-nav navbar-right">
+            {if !$user->loggedIn}
+			<li><a n:href="RegisterDod:default"><span class="glyphicon glyphicon-user"></span> Registrace dodavatele</a></li>
+			<li><a n:href="Login:default"><span class="glyphicon glyphicon-log-in"></span> Přihlášení</a></li>
+			{/if}
+			{if $user->loggedIn}
+			<li><p class="navbar-text"><span class="glyphicon glyphicon-user"> {$user->id[0]->login}</p></li>
+			<li><a n:href="Logout!"><span class="glyphicon glyphicon-log-in"></span> Odhlasit</a></li>
+			{/if}
+
+		</ul>
+	</div>
+</nav>
+
+
+	{include content}
+
+	{block scripts}
+	<script src="https://nette.github.io/resources/js/netteForms.min.js"></script>
+	{*	<script type="text/javascript" src="{$basePath}/js/netteForms.js"></script> *}
+		<script type="text/javascript" src="{$basePath}/js/nette.ajax.js"></script>
+		<script type="text/javascript" src="{$basePath}/js/dependentSelectBox.js"></script>
+		<script type="text/javascript" src="{$basePath}/js/bootstrap.js"></script>
+		<script type="text/javascript" src="{$basePath}/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="{$basePath}/js/npm.js"></script>
+
+
+		<script>
+            $(function () {
+                $.nette.init();
+            });
+		</script>
+    {/block}
+
+</body>
+</html>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project outputprefix="kb">
+
+    <!--  Project description -->
+    <name>IMP - Hra Life</name>
+    <category>Hra Life</category>
+    <author>Petr Jůda</author>
+    <authoremail>xjudap00@stud.fit.vutbr.cz </authoremail>
+    <description>Hra Life na externím maticovém displeji. IMP projekt 2017/18.</description>
+
+    <!--  MCU part -->
+    <mcu>
+        <include>mcu/libs/irq/package.xml</include>
+        <include>mcu/libs/keyboard/package.xml</include>
+        <file>main.c</file>
+    </mcu>
+
+    <!-- FPGA part -->
+    <fpga architecture="bare">
+        <include>fpga/ctrls/irq/package.xml</include>
+        <include>fpga/ctrls/keyboard/package.xml</include>
+        <file>top_level.vhd</file>
+    </fpga>
+
+</project>

@@ -1,0 +1,255 @@
+{block content}
+{if $draw == 1}
+    <h2 style="text-align: center">Množství sýrů na prodejně</h2>
+    <h4 style="text-align: center">Prodejna: {$data[0]["nazev"]}</h4>
+    <div id="columnchart_material" style="width: 100%; height: 40vh;"></div>
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <script type="text/javascript">
+        google.charts.load('current', {'packages':['bar']});
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            var data = google.visualization.arrayToDataTable([
+                ['Sýr', ''],
+                [' ',0],
+                {foreach $data as $item}
+                [{$item["nazev_syr"]},{$item["celkem"]}],
+                    {/foreach}
+                [' ',0]
+            ]);
+
+            var options = {
+                legend: { position: "none" },
+                chart: {
+                    title:"",
+                },
+                bar: { groupWidth: "90%" },
+            };
+
+            var chart = new google.charts.Bar(document.getElementById('columnchart_material'));
+
+            chart.draw(data, google.charts.Bar.convertOptions(options));
+            google.visualization.events.addListener(chart, 'select', selectHandler);
+
+            function selectHandler() {
+
+                var selection = chart.getSelection();
+                var message = '';
+                for (var i = 0; i < selection.length; i++) {
+                    var item = selection[i];
+                    if (item.row != null && item.column != null) {
+                        var str = data.getFormattedValue(item.row, item.column);
+                        var category = data.getValue(chart.getSelection()[0].row, 0);
+                        var type;
+                       onClick(item.row-1);
+                    }
+                }
+            }
+
+        }
+        function onClick(e) {
+            var cheese = [
+                        {foreach $info as $item}
+                    [
+                        {foreach $item as $value}
+                        {$value}{if $iterator->isLast()}{else},{/if}
+                        {/foreach}
+                        {if $iterator->isLast()} ] {else}
+                ],
+                    {/if}
+                    {/foreach}
+                ];
+            var hash = [
+                        {foreach $data as $item}
+
+
+                        {$item["id_syr"]}{if $iterator->isLast()}{else},{/if}
+
+
+                    {/foreach}
+                ];
+
+            $(".modal-body").empty();
+
+            var id =hash[e];
+            for (i = 0; i< cheese.length;i++) {
+                if (id === cheese[i][5]) {
+                    var datum;
+                    datum =new Date(cheese[i][4]);
+                    datum =datum.toLocaleDateString('en-US');
+                    $(".modal-title").text(cheese[i][6]);
+                    $(".modal-body").append(" <div class=\"row\"> " +
+                        "<div class=\"col-md-4\">Počáteční hmotnost</div> <div class=\"col-md-4 col-md-offset-4\">"+cheese[i][3]+" Kg </div>" +
+                        "<div class=\"col-md-4\">Aktualni hmotnost</div> <div class=\"col-md-4 col-md-offset-4\">"+cheese[i][2]+" Kg </div>" +
+                        "<div class=\"col-md-4\">Spotrebujte do</div> <div class=\"col-md-4 col-md-offset-4\">"+datum+"</div>" +
+                        "<div class=\"col-md-4\">Typ</div> <div class=\"col-md-4 col-md-offset-4\">"+cheese[i][9]+"</div>" +
+                        "<div class=\"col-md-4\">Živočich</div> <div class=\"col-md-4 col-md-offset-4\">"+cheese[i][7]+"</div>" +
+                        "<div class=\"col-md-4\">Tuk</div> <div class=\"col-md-4 col-md-offset-4\">"+cheese[i][8]+" %</div>" +
+                        "<div class=\"col-md-4\">Dodavatel</div> <div class=\"col-md-4 col-md-offset-4\">"+cheese[i][0]+"</div>" +
+                        "</div><hr />");
+                }
+            }
+            $("#myModal").modal();
+        }
+
+    </script>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="myModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="gridSystemModalLabel">Modal title</h4>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer" style="border-top:none;">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+{else}
+    <div class="container" style="width: 100%; text-align: center;">
+        <div class="form-horizontal">
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    <h3>Prodejna: {$prod_name}</h3>
+                    <p>Na prodejně nejsou žádné sýry!</p>
+                    <hr>
+                </div>
+            </div>
+        </div>
+    </div>
+{/if}
+
+{ifset $oldCheese}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h3 class="text-center">Prošlé bochníky:</h3>
+            <div class="table-responsive">
+
+                <table id="mytable" class="table table-bordred table-striped">
+
+                    <thead>
+
+                    <th class="text-center">Název:</th>
+                    <th class="text-center">Datum trvanlivosti:</th>
+                    <th class="text-center">Aktualni hmotnost:</th>
+                    <th class="text-center">Datum dodání:</th>
+                    <th class="text-center">Smazat</th>
+                    </thead>
+                    <tbody>
+                    {foreach $oldCheese as $cheese}
+                        <tr>
+                            <td align="center">{$cheese->nazev}</td>
+                            <td align="center">{$cheese->datum_trv}</td>
+                            <td align="center">{$cheese->aktualni_hmotnost} Kg</td>
+                            <td align="center">{$cheese->datum_dod}</td>
+                            <td align="center"><a n:href="delete! $cheese->id_boch, $cheese->id_pro"><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" ><span class="glyphicon glyphicon-trash"></span></button></p></a></td>
+                        </tr>
+                    {/foreach}
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+{/ifset}
+
+{form selectForm}
+<div class="container" style="width: 100%; text-align: center;">
+    <div class="form-horizontal">
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <h2>Objednávka</h2>
+                <hr>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container" style="width: 100%;">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="panel panel-login">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+
+                                {snippetArea wrapper}
+                                    {form selectForm}
+                                        <div class="form-group">
+                                            {label first /} {input first}
+                                        </div>
+                                        {snippet secondSnippet}
+                                            <div class="form-group">
+                                                {label second /} {input second}
+                                            </div>
+
+                                <div class="form-group">
+                                     {snippet thirdSnippet}
+                                    <p>Cena: {$cena}</p>
+                                    {/snippet}
+                                            {include jsCallback, input => first, link => firstChange}
+                                            {include jsCallback, input => second, link => secondChange}
+                                        {/snippet}
+                                </div>
+                                        <div class="form-group">
+                                            {label mnozstvi /}  {input mnozstvi}
+                                        </div>
+                                        <div class="form-group">
+                                            {input send}
+                                        </div>
+                                    {/form}
+                                {/snippetArea}
+
+                                {include jsCallback, input => first, link => firstChange}
+                                {include jsCallback, input => second, link => secondChange}
+
+
+
+                                {define jsCallback}
+                                    <script>
+
+                                        $('#' + {$control["selectForm"][$input]->htmlId}).off('change').on('change', function () {
+                                            $.nette.ajax({
+                                                type: 'GET',
+                                                url: {link {$link}!},
+                                                data: {
+                                                    'value': $(this).val(),
+                                                }
+                                            });
+                                        });
+
+                                    </script>
+                                {/define}
+
+
+
+                                <div class="row">
+                                    <div class="col-sm-6 col-sm-offset-3">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {/form}
